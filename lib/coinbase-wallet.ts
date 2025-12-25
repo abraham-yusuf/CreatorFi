@@ -46,26 +46,25 @@ export async function getCoinbaseServerWallet() {
         cdpWallet = await Wallet.import(data.cdpWalletData);
         evmAddress = (await cdpWallet.getDefaultAddress()).getId();
       } catch {
-         console.warn("Failed to import CDP wallet, checking for local key...");
-         if (data.evmPrivateKey) {
-             const account = privateKeyToAccount(data.evmPrivateKey as `0x${string}`);
-             evmAddress = account.address;
-         } else {
-             throw new Error("CDP Import failed and no local key found.");
-         }
+        console.warn("Failed to import CDP wallet, checking for local key...");
+        if (data.evmPrivateKey) {
+          const account = privateKeyToAccount(data.evmPrivateKey as `0x${string}`);
+          evmAddress = account.address;
+        } else {
+          throw new Error("CDP Import failed and no local key found.");
+        }
       }
     } else if (data.evmPrivateKey) {
-        const account = privateKeyToAccount(data.evmPrivateKey as `0x${string}`);
-        evmAddress = account.address;
+      const account = privateKeyToAccount(data.evmPrivateKey as `0x${string}`);
+      evmAddress = account.address;
     } else {
-        // Should not happen if file exists and valid
-        throw new Error("Invalid wallet file format");
+      // Should not happen if file exists and valid
+      throw new Error("Invalid wallet file format");
     }
 
     // Load SVM Wallet
     const secretKey = bs58.decode(data.solanaSecretKey);
     solanaKeypair = Keypair.fromSecretKey(secretKey);
-
   } else {
     console.log("Creating new wallets...");
 
@@ -76,25 +75,28 @@ export async function getCoinbaseServerWallet() {
 
     // Create EVM Wallet
     if (hasCdpKeys) {
-        try {
-            console.log("Attempting to create CDP Wallet...");
-            cdpWallet = await Wallet.create();
-            const cdpData = await cdpWallet.export();
-            evmAddress = (await cdpWallet.getDefaultAddress()).getId();
-            walletData.cdpWalletData = cdpData;
-        } catch (e) {
-            console.warn("CDP Wallet creation failed (likely auth), falling back to local viem key.", e);
-            const pk = generatePrivateKey();
-            const account = privateKeyToAccount(pk);
-            evmAddress = account.address;
-            walletData.evmPrivateKey = pk;
-        }
-    } else {
-        console.log("No CDP keys found. Generating local EVM key via Viem...");
+      try {
+        console.log("Attempting to create CDP Wallet...");
+        cdpWallet = await Wallet.create();
+        const cdpData = await cdpWallet.export();
+        evmAddress = (await cdpWallet.getDefaultAddress()).getId();
+        walletData.cdpWalletData = cdpData;
+      } catch (e) {
+        console.warn(
+          "CDP Wallet creation failed (likely auth), falling back to local viem key.",
+          e,
+        );
         const pk = generatePrivateKey();
         const account = privateKeyToAccount(pk);
         evmAddress = account.address;
         walletData.evmPrivateKey = pk;
+      }
+    } else {
+      console.log("No CDP keys found. Generating local EVM key via Viem...");
+      const pk = generatePrivateKey();
+      const account = privateKeyToAccount(pk);
+      evmAddress = account.address;
+      walletData.evmPrivateKey = pk;
     }
 
     fs.writeFileSync(WALLET_FILE, JSON.stringify(walletData, null, 2));
@@ -104,6 +106,6 @@ export async function getCoinbaseServerWallet() {
   return {
     cdpWallet, // Might be null if using local key
     evmAddress,
-    solanaKeypair
+    solanaKeypair,
   };
 }

@@ -1,31 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { UnifiedWalletButton } from "@/components/UnifiedWalletButton";
 import { ContentPaywall } from "@/components/ContentPaywall";
+import { Header } from "@/components/Header";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans selection:bg-purple-500/30">
 
-      {/* Header */}
-      <header className="border-b border-gray-800 bg-black/50 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-             <div className="h-10 w-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center font-bold text-xl">X</div>
-             <span className="text-xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-               X402 Creator Platform
-             </span>
-          </div>
-          <UnifiedWalletButton />
-        </div>
-      </header>
+      <Header />
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
 
         {/* Hero / Intro */}
-        <div className="text-center mb-16">
-          <h1 className="text-5xl font-extrabold tracking-tight mb-4">
+        <div className="text-center mb-8 md:mb-16">
+          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
             Monetize Any Content. <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
               Any Chain. Instantly.
@@ -38,7 +27,7 @@ export default function Home() {
         </div>
 
         {/* Content Grid */}
-        <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
 
           {/* Item 1: Base (EVM) Article */}
           <div className="flex flex-col gap-4">

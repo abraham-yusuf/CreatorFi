@@ -3,12 +3,17 @@ import { toClientSvmSigner } from "@x402/svm";
 
 // Mocking the Client interface based on user requirements
 // since the installed @x402/core version 2 does not export 'Client'.
+/**
+ * A mock client for the X402 protocol.
+ */
 class X402Client {
   projectId: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   plugins: any[] = [];
 
   /**
+   * Creates a new X402Client.
+   *
    * @param config - The client configuration.
    * @param config.projectId - The project ID.
    */
@@ -18,6 +23,7 @@ class X402Client {
 
   /**
    * Registers a plugin.
+   *
    * @param plugin - The plugin to register.
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -27,6 +33,7 @@ class X402Client {
 
   /**
    * Simulates a purchase.
+   *
    * @param params - The purchase parameters.
    * @returns The transaction result.
    */
@@ -54,7 +61,7 @@ export function getX402Client(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   evmWalletClient: any,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  solanaWalletAdapter: any
+  solanaWalletAdapter: any,
 ) {
   // Merchant addresses from Env
   const evmMerchant = process.env.NEXT_PUBLIC_BASE_MERCHANT_ADDRESS;
@@ -67,20 +74,20 @@ export function getX402Client(
   // Register EVM Signer
   if (evmWalletClient && evmMerchant) {
     try {
-        const signer = toClientEvmSigner(evmWalletClient);
-        client.registerPlugin({ type: 'evm', signer, merchant: evmMerchant });
+      const signer = toClientEvmSigner(evmWalletClient);
+      client.registerPlugin({ type: "evm", signer, merchant: evmMerchant });
     } catch (e) {
-        console.warn("Failed to create EVM signer", e);
+      console.warn("Failed to create EVM signer", e);
     }
   }
 
   // Register SVM Signer
   if (solanaWalletAdapter && solMerchant) {
     try {
-        const signer = toClientSvmSigner(solanaWalletAdapter);
-        client.registerPlugin({ type: 'svm', signer, merchant: solMerchant });
+      const signer = toClientSvmSigner(solanaWalletAdapter);
+      client.registerPlugin({ type: "svm", signer, merchant: solMerchant });
     } catch (e) {
-         console.warn("Failed to create SVM signer", e);
+      console.warn("Failed to create SVM signer", e);
     }
   }
 

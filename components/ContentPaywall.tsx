@@ -92,8 +92,8 @@ export function ContentPaywall({
       <div className="relative">
         {contentType === "article" && (
             <div className="p-6 h-64 overflow-hidden relative">
-                <h3 className="text-2xl font-bold text-gray-100 mb-4">Exclusive Analysis</h3>
-                <p className="text-gray-300">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-100 mb-2 md:mb-4">Exclusive Analysis</h3>
+                <p className="text-gray-300 text-sm md:text-base">
                     In the rapidly evolving landscape of Web3, protocols like X402 are redefining how creators monetize content.
                     This article dives deep into the technical architecture...
                 </p>
@@ -123,19 +123,23 @@ export function ContentPaywall({
         )}
 
         {/* Lock Overlay */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[1px] opacity-100 transition-opacity">
-            <LockClosedIcon className="h-12 w-12 text-gray-200 mb-4" />
-            <h3 className="text-xl font-bold text-white mb-2">Premium Content</h3>
-            <p className="text-gray-300 mb-6">Unlock to verify access</p>
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[1px] opacity-100 transition-opacity p-4">
+            <LockClosedIcon className="h-8 w-8 md:h-12 md:w-12 text-gray-200 mb-2 md:mb-4" />
+            <h3 className="text-lg md:text-xl font-bold text-white mb-1 md:mb-2">Premium Content</h3>
+            <p className="text-sm md:text-base text-gray-300 mb-4 md:mb-6">Unlock to verify access</p>
 
             <button
                 onClick={handlePurchase}
                 disabled={loading}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-full shadow-lg transform transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 md:px-8 md:py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-full shadow-lg transform transition-all hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-                {loading ? "Processing..." : `Buy for ${price} ${currency}`}
+                {loading ? "Processing..." : (
+                  <span>
+                    Buy for <span className="font-mono">{price} {currency}</span>
+                  </span>
+                )}
             </button>
-            <p className="mt-4 text-xs text-gray-400">
+            <p className="mt-2 md:mt-4 text-xs text-gray-400">
                 via {chainId === "base" ? "Base (EVM)" : "Solana (SVM)"}
             </p>
         </div>

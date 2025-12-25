@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model User {
+  id            String    @id @default(cuid())
+  walletAddress String    @unique
+  createdAt     DateTime  @default(now())
+  contents      Content[]
+}
+
+model Content {
+  id            String   @id @default(cuid())
+  title         String
+  description   String
+  thumbnailUrl  String
+  type          String   // ENUM: ARTICLE, VIDEO, AUDIO
+  price         Decimal  @default(0)
+  currency      String   @default("USDC")
+  contentUrl    String?  // For Video/Audio source
+  body          String?  // For Article text
+  createdAt     DateTime @default(now())
+
+  creatorId     String
+  creator       User     @relation(fields: [creatorId], references: [id])
+}

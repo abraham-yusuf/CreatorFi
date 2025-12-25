@@ -1,10 +1,25 @@
-"use client";
-
-import Image from "next/image";
-import { ContentPaywall } from "@/components/ContentPaywall";
+import Link from "next/link";
+import prisma from "@/lib/prisma";
 import { Header } from "@/components/Header";
+import { ContentCard } from "@/components/ContentCard";
 
-export default function Home() {
+// Opt-out of static generation since we fetch data
+export const dynamic = 'force-dynamic';
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ filter?: string }>;
+}) {
+  const { filter } = await searchParams;
+
+  const where = filter && filter !== 'ALL' ? { type: filter } : {};
+  const contents = await prisma.content.findMany({
+    where,
+    include: { creator: true },
+    orderBy: { createdAt: 'desc' },
+  });
+
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans selection:bg-purple-500/30">
 
@@ -15,89 +30,58 @@ export default function Home() {
         {/* Hero / Intro */}
         <div className="text-center mb-8 md:mb-16">
           <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
-            Monetize Any Content. <br />
+            Web3 Creator Marketplace <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-500">
-              Any Chain. Instantly.
+              Pay-Per-View via X402
             </span>
           </h1>
-          <p className="text-xl text-gray-400 max-w-2xl mx-auto">
-            Experience the first unified payment protocol for EVM and SVM.
-            Connect your wallet and unlock premium content below.
+          <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-8">
+            Buy and sell premium content using USDC on Base.
+            The first decentralized retail platform for creators.
           </p>
+          <div className="flex justify-center gap-4">
+             <Link href="/dashboard/create" className="bg-white text-black px-6 py-2 rounded-full font-bold hover:bg-gray-200 transition-colors">
+               Start Creating
+             </Link>
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="flex justify-center gap-2 mb-8 overflow-x-auto pb-2">
+            {['ALL', 'VIDEO', 'AUDIO', 'ARTICLE'].map((f) => (
+                <Link
+                    key={f}
+                    href={f === 'ALL' ? '/' : `/?filter=${f}`}
+                    className={`px-4 py-1.5 rounded-full text-sm font-bold border transition-colors ${
+                        (filter === f || (!filter && f === 'ALL'))
+                        ? 'bg-blue-600 border-blue-600 text-white'
+                        : 'bg-gray-900 border-gray-800 text-gray-400 hover:border-gray-600'
+                    }`}
+                >
+                    {f}
+                </Link>
+            ))}
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {contents.map((content) => (
+                <ContentCard
+                    key={content.id}
+                    id={content.id}
+                    title={content.title}
+                    creatorAddress={content.creator.walletAddress}
+                    type={content.type}
+                    price={content.price.toString()}
+                    thumbnailUrl={content.thumbnailUrl}
+                />
+            ))}
 
-          {/* Item 1: Base (EVM) Article */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full bg-blue-900/30 text-blue-400 text-xs font-bold border border-blue-800">
-                    BASE NETWORK
-                </span>
-                <span className="text-sm text-gray-400">Article</span>
-            </div>
-
-            <ContentPaywall
-                contentId="article-001"
-                price={5}
-                currency="USDC"
-                chainId="base"
-                contentType="article"
-            >
-                <div className="bg-gray-900 p-8 rounded-xl border border-gray-800">
-                    <h2 className="text-3xl font-bold mb-6 text-white">The Future of Cross-Chain Payments</h2>
-                    <div className="prose prose-invert max-w-none">
-                        <p className="lead text-xl text-gray-300 mb-4">
-                            Interoperability has long been the holy grail of blockchain technology.
-                            With the advent of protocols like X402, we are finally seeing a bridge that doesn't just transfer tokens, but transfers value and access.
-                        </p>
-                        <p className="text-gray-400">
-                            By leveraging server-side wallets powered by Coinbase CDP, creators can now abstract away the complexity of chain management.
-                            The user simply pays in their preferred currency, and the protocol handles the verification and access control logic seamlessly...
-                        </p>
-                        <p className="text-gray-400 mt-4">
-                            (This is the premium content you unlocked! You can now read the full analysis.)
-                        </p>
-                    </div>
+            {contents.length === 0 && (
+                <div className="col-span-full text-center py-20 text-gray-500">
+                    No content found. Be the first to create something!
                 </div>
-            </ContentPaywall>
-          </div>
-
-          {/* Item 2: Solana (SVM) Video */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center justify-between">
-                <span className="px-3 py-1 rounded-full bg-purple-900/30 text-purple-400 text-xs font-bold border border-purple-800">
-                    SOLANA NETWORK
-                </span>
-                <span className="text-sm text-gray-400">Video</span>
-            </div>
-
-            <ContentPaywall
-                contentId="video-001"
-                price={0.1}
-                currency="SOL"
-                chainId="solana"
-                contentType="video"
-                thumbnailUrl="https://images.unsplash.com/photo-1626814026160-2237a95fc5a0?q=80&w=1000&auto=format&fit=crop"
-            >
-                <div className="bg-black rounded-xl overflow-hidden border border-gray-800 aspect-video relative">
-                    {/* Simulated Unlocked Video Player */}
-                    <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-                        <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500 mb-4 animate-pulse">
-                                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-white" viewBox="0 0 20 20" fill="currentColor">
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                            </div>
-                            <h3 className="text-white text-xl font-bold">Content Unlocked!</h3>
-                            <p className="text-gray-400 mt-2">The video would play here.</p>
-                        </div>
-                    </div>
-                </div>
-            </ContentPaywall>
-          </div>
-
+            )}
         </div>
 
         {/* Footer */}

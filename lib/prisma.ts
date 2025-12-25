@@ -1,11 +1,7 @@
 import { PrismaClient } from '@prisma/client'
 
 const prismaClientSingleton = () => {
-  // Pass datasourceUrl explicitly as checking the schema.prisma generated client
-  // might not have it if we stripped it for validation reasons in this specific env.
-  return new PrismaClient({
-    datasourceUrl: process.env.DATABASE_URL || "file:./dev.db"
-  })
+  return new PrismaClient()
 }
 
 type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>

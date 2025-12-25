@@ -14,6 +14,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  other: {
+    'base:app_id': '694cd8cec63ad876c9081287',
+  },
   title: "x402 Creator Platform",
   description: "A chain-agnostic protocol for web payments",
 };

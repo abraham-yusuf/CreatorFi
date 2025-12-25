@@ -47,7 +47,7 @@ export function Header() {
         <div className="md:hidden absolute top-20 left-0 w-full bg-[#0a0a0a] border-b border-gray-800 p-4 shadow-2xl animate-fade-in-down">
           <div className="flex flex-col gap-4">
              <div className="p-4 border border-gray-800 rounded-xl bg-gray-900/50">
-                <p className="text-sm text-gray-400 mb-3 uppercase tracking-wider font-bold">Connect Wallet</p>
+                <p className="text-sm text-gray-400 mb-3 uppercase tracking-wider font-bold">Connect</p>
                 <div className="flex justify-center">
                     <UnifiedWalletButton />
                 </div>

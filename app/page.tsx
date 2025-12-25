@@ -86,7 +86,7 @@ export default async function Home({
 
         {/* Footer */}
         <footer className="mt-24 pt-8 border-t border-gray-800 text-center text-gray-500 text-sm">
-            <p>&copy; 2024 X402 Demo. Powered by Coinbase CDP & Solana.</p>
+            <p>&copy; 2025 X402 CreatorFi. Powered by Web3IDN.</p>
         </footer>
 
       </main>

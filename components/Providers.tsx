@@ -24,7 +24,7 @@ import { clusterApiUrl } from "@solana/web3.js";
 import "@solana/wallet-adapter-react-ui/styles.css";
 
 const wagmiConfig = getDefaultConfig({
-  appName: "X402 Creator Platform",
+  appName: "X402 CreatorFi",
   projectId: "YOUR_PROJECT_ID",
   chains: [base, baseSepolia],
   ssr: true,

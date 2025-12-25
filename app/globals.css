@@ -3,6 +3,8 @@
 @theme {
   --color-background: #ffffff;
   --color-foreground: #171717;
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,7 +17,7 @@
 body {
   color: var(--color-foreground);
   background: var(--color-background);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
 }
 
 @utility full-bleed {

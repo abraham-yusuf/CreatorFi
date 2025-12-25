@@ -29,7 +29,6 @@ async function main() {
     console.log("\nPlease add these to your .env.local file as:");
     console.log(`NEXT_PUBLIC_BASE_MERCHANT_ADDRESS=${evmAddress}`);
     console.log(`NEXT_PUBLIC_SOLANA_MERCHANT_ADDRESS=${solanaKeypair.publicKey.toBase58()}`);
-
   } catch (error) {
     console.error("Error initializing wallet:", error);
   }

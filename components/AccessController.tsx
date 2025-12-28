@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { Paywall } from "./Paywall";
+import { Loader2, Lock, Play, Music, FileText } from "lucide-react";
 
 interface AccessControllerProps {
   contentId: string;
@@ -52,39 +53,52 @@ export function AccessController({
   if (status === "loading") {
     return (
       <div className="w-full aspect-video flex items-center justify-center bg-gray-900 rounded-xl border border-gray-800">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+        <Loader2 className="h-12 w-12 text-blue-500 animate-spin" />
       </div>
     );
   }
 
   if (status === "locked") {
     return (
-      <Paywall
-        contentId={contentId}
-        price={price}
-        currency={currency}
-        creatorAddress={creatorAddress}
-        thumbnailUrl={thumbnailUrl}
-        onSuccess={() => {
-          // Immediately try to fetch content again
-          fetchContent();
-        }}
-      />
+      <div className="relative">
+        <div className="absolute top-4 left-4 z-10 bg-black/50 p-2 rounded-full">
+            <Lock className="text-white w-6 h-6" />
+        </div>
+        <Paywall
+          contentId={contentId}
+          price={price}
+          currency={currency}
+          creatorAddress={creatorAddress}
+          thumbnailUrl={thumbnailUrl}
+          onSuccess={() => {
+            // Immediately try to fetch content again
+            fetchContent();
+          }}
+        />
+      </div>
     );
   }
 
   // Unlocked State
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in relative">
       {type === "VIDEO" && (
-        <video controls className="w-full aspect-video" poster={thumbnailUrl}>
-          {contentData && <source src={contentData} />}
-          Your browser does not support video.
-        </video>
+        <div className="relative">
+          <div className="absolute top-4 left-4 z-10 bg-black/50 p-2 rounded-full">
+            <Play className="text-white w-6 h-6" />
+          </div>
+          <video controls className="w-full aspect-video rounded-xl" poster={thumbnailUrl}>
+            {contentData && <source src={contentData} />}
+            Your browser does not support video.
+          </video>
+        </div>
       )}
 
       {type === "AUDIO" && (
-        <div className="p-12 flex flex-col items-center justify-center bg-gray-900">
+        <div className="p-12 flex flex-col items-center justify-center bg-gray-900 rounded-xl border border-gray-800 relative">
+          <div className="absolute top-4 left-4 bg-black/50 p-2 rounded-full">
+             <Music className="text-white w-6 h-6" />
+          </div>
           <img
             src={thumbnailUrl}
             className="w-48 h-48 object-cover rounded-lg shadow-lg mb-6"
@@ -97,7 +111,10 @@ export function AccessController({
       )}
 
       {type === "ARTICLE" && (
-        <div className="p-8 md:p-12 prose prose-invert max-w-none">
+        <div className="p-8 md:p-12 prose prose-invert max-w-none bg-gray-900 rounded-xl border border-gray-800 relative">
+           <div className="absolute top-4 left-4 bg-black/50 p-2 rounded-full z-10">
+             <FileText className="text-white w-6 h-6" />
+          </div>
           <img
             src={thumbnailUrl}
             className="w-full h-64 md:h-96 object-cover rounded-xl mb-8"

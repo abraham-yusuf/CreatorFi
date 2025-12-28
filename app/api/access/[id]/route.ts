@@ -21,7 +21,7 @@ export async function GET(
   const cookieStore = await cookies();
   const paymentCookie = cookieStore.get(`x402-access-${id}`);
 
-  // For MVP: Check if cookie exists and matches "true"
+  // Check if cookie exists and matches "true"
   const isPaid = paymentCookie?.value === "true";
 
   if (!isPaid) {

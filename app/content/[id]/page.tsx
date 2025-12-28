@@ -14,17 +14,29 @@ export default async function ContentPage({
   const { id } = await params;
 
   // 1. Fetch Content Logic (Public Metadata Only)
+  // CRITICAL: We explicitly select ONLY the fields needed for the shell.
+  // We DO NOT fetch 'contentUrl' or 'body' here to prevent server-side leakage.
   const content = await prisma.content.findUnique({
     where: { id },
-    include: { creator: true },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      price: true,
+      currency: true,
+      type: true,
+      thumbnailUrl: true,
+      creator: {
+        select: {
+          walletAddress: true
+        }
+      }
+    }
   });
 
   if (!content) {
     notFound();
   }
-
-  // NOTE: We no longer check payment here.
-  // The Client Component <AccessController> handles the API check.
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans">

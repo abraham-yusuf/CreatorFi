@@ -13,9 +13,10 @@ interface PaywallProps {
   currency: string;
   creatorAddress: string;
   thumbnailUrl: string;
+  onSuccess?: () => void;
 }
 
-export function Paywall({ contentId, price, currency, creatorAddress, thumbnailUrl }: PaywallProps) {
+export function Paywall({ contentId, price, currency, creatorAddress, thumbnailUrl, onSuccess }: PaywallProps) {
   const [loading, setLoading] = useState(false);
   const { address, isConnected } = useAccount();
   const { data: walletClient } = useWalletClient();
@@ -52,7 +53,10 @@ export function Paywall({ contentId, price, currency, creatorAddress, thumbnailU
         // We send the proof (txId) to the server to set the access cookie
         await verifyPayment(contentId, result.txId);
 
-        // 3. Refresh to show content
+        // 3. Refresh to show content or callback
+        if (onSuccess) {
+          onSuccess();
+        }
         router.refresh();
       }
     } catch (error) {

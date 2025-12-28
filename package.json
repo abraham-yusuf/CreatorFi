@@ -17,7 +17,7 @@
     "@coinbase/cdp-sdk": "^1.40.1",
     "@coinbase/coinbase-sdk": "^0.25.0",
     "@heroicons/react": "^2.2.0",
-    "@prisma/client": "^5.22.0",
+    "@prisma/client": "5.22.0",
     "@rainbow-me/rainbowkit": "^2.2.10",
     "@solana/wallet-adapter-base": "^0.9.27",
     "@solana/wallet-adapter-react": "^0.15.39",
@@ -57,7 +57,7 @@
     "eslint-plugin-jsdoc": "^50.6.9",
     "eslint-plugin-prettier": "^5.2.6",
     "prettier": "3.5.2",
-    "prisma": "^5.22.0",
+    "prisma": "5.22.0",
     "tailwindcss": "^4.0.0",
     "typescript": "^5"
   }

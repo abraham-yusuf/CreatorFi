@@ -1,8 +1,7 @@
 import prisma from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import { cookies } from "next/headers";
-import { Paywall } from "@/components/Paywall";
 import { Header } from "@/components/Header";
+import { AccessController } from "@/components/AccessController";
 
 // Opt-out of static generation
 export const dynamic = 'force-dynamic';
@@ -14,7 +13,7 @@ export default async function ContentPage({
 }) {
   const { id } = await params;
 
-  // 1. Fetch Content Logic
+  // 1. Fetch Content Logic (Public Metadata Only)
   const content = await prisma.content.findUnique({
     where: { id },
     include: { creator: true },
@@ -24,12 +23,8 @@ export default async function ContentPage({
     notFound();
   }
 
-  // 2. Check Payment (Cookie Proof)
-  const cookieStore = await cookies();
-  const hasAccess = cookieStore.get(`x402-access-${id}`)?.value === "true";
-  const isFree = parseFloat(content.price.toString()) === 0;
-
-  const showContent = isFree || hasAccess;
+  // NOTE: We no longer check payment here.
+  // The Client Component <AccessController> handles the API check.
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans">
@@ -43,44 +38,16 @@ export default async function ContentPage({
            </p>
         </div>
 
-        {/* Content Area */}
+        {/* Content Area - Delegated to AccessController */}
         <div className="bg-black border border-gray-800 rounded-xl overflow-hidden shadow-2xl mb-8">
-            {showContent ? (
-                // UNLOCKED STATE
-                <div className="animate-fade-in">
-                    {content.type === "VIDEO" && (
-                        <video controls className="w-full aspect-video" poster={content.thumbnailUrl}>
-                            {content.contentUrl && <source src={content.contentUrl} />}
-                            Your browser does not support video.
-                        </video>
-                    )}
-
-                    {content.type === "AUDIO" && (
-                        <div className="p-12 flex flex-col items-center justify-center bg-gray-900">
-                            <img src={content.thumbnailUrl} className="w-48 h-48 object-cover rounded-lg shadow-lg mb-6" />
-                            <audio controls className="w-full max-w-md">
-                                {content.contentUrl && <source src={content.contentUrl} />}
-                            </audio>
-                        </div>
-                    )}
-
-                    {content.type === "ARTICLE" && (
-                        <div className="p-8 md:p-12 prose prose-invert max-w-none">
-                            <img src={content.thumbnailUrl} className="w-full h-64 md:h-96 object-cover rounded-xl mb-8" />
-                            <div dangerouslySetInnerHTML={{ __html: content.body?.replace(/\n/g, '<br/>') || "" }} />
-                        </div>
-                    )}
-                </div>
-            ) : (
-                // LOCKED STATE (PAYWALL)
-                <Paywall
-                    contentId={content.id}
-                    price={content.price.toString()}
-                    currency={content.currency}
-                    creatorAddress={content.creator.walletAddress}
-                    thumbnailUrl={content.thumbnailUrl}
-                />
-            )}
+           <AccessController
+              contentId={content.id}
+              type={content.type}
+              price={content.price.toString()}
+              currency={content.currency}
+              creatorAddress={content.creator.walletAddress}
+              thumbnailUrl={content.thumbnailUrl}
+           />
         </div>
 
         {/* Description */}

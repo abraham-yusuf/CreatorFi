@@ -18,7 +18,7 @@ importers:
         specifier: ^2.2.0
         version: 2.2.0(react@19.2.3)
       '@prisma/client':
-        specifier: ^5.22.0
+        specifier: 5.22.0
         version: 5.22.0(prisma@5.22.0)
       '@rainbow-me/rainbowkit':
         specifier: ^2.2.10
@@ -133,7 +133,7 @@ importers:
         specifier: 3.5.2
         version: 3.5.2
       prisma:
-        specifier: ^5.22.0
+        specifier: 5.22.0
         version: 5.22.0
       tailwindcss:
         specifier: ^4.0.0
@@ -13561,7 +13561,7 @@ snapshots:
 
   extension-port-stream@3.0.0:
     dependencies:
-      readable-stream: 3.6.2
+      readable-stream: 4.7.0
       webextension-polyfill: 0.10.0
 
   eyes@0.1.8: {}

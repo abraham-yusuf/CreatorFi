@@ -148,14 +148,14 @@ model Content {
 
 ## **6\. Roadmap Pengembangan**
 
-### **Fase 1: MVP (Current State)**
+### **Fase 1: MVP**
 
-* \[x\] Setup Next.js & Tailwind.  
-* \[x\] Integrasi Database PostgreSQL.  
-* \[x\] Landing Page dengan Grid Card.  
-* \[x\] Creator Dashboard (Upload & Set Harga).  
-* \[x\] Implementasi Protokol x402 (Guard 402 & Headers).  
-* \[x\] Paywall UI Component (Mocked/Simulated Payment).
+* \[ \] Setup Next.js & Tailwind.  
+* \[ \] Integrasi Database PostgreSQL.  
+* \[ \] Landing Page dengan Grid Card.  
+* \[ \] Creator Dashboard (Upload & Set Harga).  
+* \[ \] Implementasi Protokol x402 (Guard 402 & Headers).  
+* \[ \] Paywall UI Component (Mocked/Simulated Payment).
 
 ### **Fase 2: On-Chain Integration (Next Step)**
 

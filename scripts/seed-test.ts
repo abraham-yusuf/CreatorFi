@@ -9,6 +9,7 @@ async function seed() {
   const creator = await prisma.user.create({
     data: {
       walletAddress: "0x1234567890abcdef1234567890abcdef12345678",
+      username: "Test Creator",
     }
   })
 
@@ -21,6 +22,7 @@ async function seed() {
       thumbnailUrl: "https://via.placeholder.com/640x360",
       contentUrl: "https://www.w3schools.com/html/mov_bbb.mp4", // Dummy video
       creatorId: creator.id,
+      creatorAddress: creator.walletAddress,
     }
   })
 

@@ -42,6 +42,6 @@ export async function GET(
   return NextResponse.json({
     type: content.type,
     // If it's an article, return text. If media, return URL.
-    data: content.type === "ARTICLE" ? content.body : content.contentUrl
+    data: content.type === "ARTICLE" ? content.textContent : content.contentUrl
   });
 }

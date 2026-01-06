@@ -30,7 +30,7 @@ export async function createContent(formData: FormData) {
   const type = formData.get("type") as string;
   const thumbnailUrl = formData.get("thumbnailUrl") as string;
   const contentUrl = formData.get("contentUrl") as string;
-  const body = formData.get("body") as string;
+  const textContent = formData.get("body") as string; // Form still uses "body" but we store as textContent
   // SECURITY NOTE: In a real production app, "walletAddress" should be verified via SIWE (Sign-In with Ethereum)
   // or a secure session cookie. Accepting it from raw form data allows impersonation.
   // For this MVP/Demo, we trust the client's assertion.
@@ -59,8 +59,9 @@ export async function createContent(formData: FormData) {
       type,
       thumbnailUrl: thumbnailUrl || "https://via.placeholder.com/640x360",
       contentUrl: type !== "ARTICLE" ? contentUrl : undefined,
-      body: type === "ARTICLE" ? body : undefined,
+      textContent: type === "ARTICLE" ? textContent : undefined,
       creatorId: user.id,
+      creatorAddress: walletAddress, // Store creator address for x402 payment headers
     },
   });
 

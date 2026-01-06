@@ -13,22 +13,30 @@ datasource db {
 model User {
   id            String    @id @default(cuid())
   walletAddress String    @unique
+  username      String?
   createdAt     DateTime  @default(now())
   contents      Content[]
 }
 
 model Content {
-  id            String   @id @default(cuid())
-  title         String
-  description   String
-  thumbnailUrl  String
-  type          String   // ENUM: ARTICLE, VIDEO, AUDIO
-  price         Decimal  @default(0)
-  currency      String   @default("USDC")
-  contentUrl    String?  // For Video/Audio source
-  body          String?  // For Article text
-  createdAt     DateTime @default(now())
+  id           String  @id @default(cuid())
+  title        String
+  description  String?
+  thumbnailUrl String
+  type         String // ENUM: ARTICLE, VIDEO, AUDIO
+  price        Decimal @default(0)
+  currency     String  @default("USDC")
 
-  creatorId     String
-  creator       User     @relation(fields: [creatorId], references: [id])
+  // Data Privat (Only accessible via API Gatekeeper)
+  contentUrl  String? // For Video/Audio
+  textContent String? @db.Text // For Article (renamed from body for PRD consistency)
+
+  creatorId      String
+  creatorAddress String // Redundant but needed for x402 header quick access
+  creator        User   @relation(fields: [creatorId], references: [id])
+
+  createdAt DateTime @default(now())
+
+  @@index([creatorId])
+  @@index([type])
 }
